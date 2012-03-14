@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# This script will test the capacity of /tmp and
+# initiate a clean-up if it is 95% full or more.
+#
+# It will start deleting files > 720 hours old and 
+# progressively remove more recent files until it 
+# reclaims sufficient space.
+#
+# Brian Smith
+#
+
+PATH=$PATH:/usr/sbin
+
+function calc(){
+	echo "scale=0; $@" | bc | sed 's/\..*//g'
+}
+
+if mount | grep -q /tmp; then
+	TOTAL=`df /tmp | awk '/^\/dev.*/ { print $2 }'`
+	AVAIL=`df /tmp | awk '/^\/dev.*/ { print $4 }'`
+else
+	TOTAL=`df / | awk '/^[ ]+[0-9]+ { print $1 }'`
+	TOTAL=`df / | awk '/^[ ]+[0-9]+ { print $3 }'`
+fi
+
+# No data to work with!!!
+[ -z "$TOTAL" -o -z "$AVAIL" ] && exit
+
+[ -f /var/tmp/tmp_watch.run ] && exit 0
+touch /var/tmp/tmp_watch.run
+
+let HOURS=720
+
+# if /tmp is 95% full
+
+T95=$(calc $TOTAL*0.05)
+
+if [ $AVAIL -lt $T95 ]; then
+	# while /tmp is > than 75% full	
+	while [ $AVAIL -lt $T95 ]; do
+		tmpwatch $HOURS /tmp
+		let HOURS=$HOURS-12
+		AVAIL=`df /tmp | awk '/^\/dev.*/ { print $4 }'`
+	done
+fi
+rm -f /var/tmp/tmp_watch.run

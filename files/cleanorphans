@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Good idea from the GridEngine list.  Check /proc/<pid>/environ
+# for the existence of JOB_ID.  If it exists, then check to see
+# if that JOB_ID is still associated with that node.  If not, kill
+#
+# Author: Brian Smith (brs@usf.edu)
+#
+
+if [ -f "/var/run/cleanorphans" ]; then
+	exit 0
+else
+	touch /var/run/cleanorphans
+fi
+
+. /usr/share/gridengine/default/common/settings.sh
+# . /opt/ge6.2u4/itrc/common/settings.sh
+
+function debug(){
+	[ -n "$DEBUG" ] && echo $@
+}
+
+ME=`hostname`
+
+# make sure qstat works
+qstat -u \* -s r -q \*@$ME &> /dev/null
+if [ $? -ne 0 ]; then
+	debug "qstat failed!"
+	rm -f /var/run/cleanorphans
+	exit
+fi
+
+LOCAL_JOBS=`qstat -s r -g t -q \*@$ME -u \* | awk --posix '/^[ ]+[0-9]+.*$/ { printf "%s ", $1 }'`
+debug "Valid jobs: $LOCAL_JOBS"
+
+for pid in `ls /proc | egrep '[0-9]+'`; do 
+	[ -f "/proc/$pid/environ" ] || continue
+	JOBID=`strings /proc/$pid/environ 2> /dev/null | grep JOB_ID | cut -d'=' -f2`
+
+	[ -z "$JOBID" ] && continue
+	if ! echo $LOCAL_JOBS | grep $JOBID &> /dev/null; then 
+		KP="$KP $pid"
+		debug "PID $pid from stale job $JOBID should not exist!"
+	fi
+done
+
+if [ -n "$KP" ]; then
+	debug "PIDs to reap: $KP"
+	[ -z "$DEBUG" ] && kill -9 $KP &> /dev/null
+fi
+
+rm -f /var/run/cleanorphans
+
+exit

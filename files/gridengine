@@ -1,0 +1,4 @@
+SGE_ROOT=/usr/share/gridengine
+SGE_CELL=default
+#Uncomment this if using infiniband to remove the locked memory limit
+RLIMIT_MEMLOCKED=unlimited

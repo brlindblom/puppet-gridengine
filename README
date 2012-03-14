@@ -1,0 +1,7 @@
+Puppet module for gridengine installation
+
+Installation packages are assumed to come from EPEL.
+
+Clients should inherit gridengine::execd
+
+the server should inherit gridengine::qmaster

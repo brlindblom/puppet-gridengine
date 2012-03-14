@@ -1,0 +1,100 @@
+#!/bin/bash
+#
+#
+
+PATH=/bin:/usr/bin
+
+float_math() {
+    echo "scale=0; $1" | bc | cut -d'.' -f1
+}
+
+mem_convert(){
+    mem_spec=$1
+    [ -z "$mem_spec" ] && return
+    case "$mem_spec" in
+        *k) mem_spec=$(float_math "${mem_spec//k/}*1000") ;;
+        *K) mem_spec=$(float_math "${mem_spec//K/}*1024") ;;
+        *m) mem_spec=$(float_math "${mem_spec//m/}*1000*1000") ;;
+        *M) mem_spec=$(float_math "${mem_spec//M/}*1024*1024") ;;
+        *g) mem_spec=$(float_math "${mem_spec//g/}*1000*1000*1000") ;;
+        *G) mem_spec=$(float_math "${mem_spec//G/}*1024*1024*1024") ;;
+    esac
+    echo $mem_spec
+}
+
+jsv_on_start(){
+    # jsv_send_env
+    return
+}
+
+jsv_on_verify(){
+    do_correct="false"
+
+    has_h_vmem=$(jsv_sub_is_param l_hard h_vmem)
+    has_h_stack=$(jsv_sub_is_param l_hard h_stack)
+#    if [ "$has_h_vmem" == "true" -o "$has_h_stack" == "true" ]; then
+#        jsv_reject "You cannot specify h_vmem or h_stack anymore!  Please use mps or mpj instead."
+#        return
+#    fi
+
+#    _cwd=$(jsv_get_param cwd)
+#
+#    if [[ "$_cwd" =~ ^\/home\/.* ]]; then
+#        jsv_reject "Jobs can no longer be run from the /home directory!  Please stage your job in \$WORK"
+#        return
+#    fi 
+
+    jsv_set_param o
+    jsv_set_param j y
+
+    mps=$(mem_convert $(jsv_sub_get_param l_hard mps))
+    mpj=$(mem_convert $(jsv_sub_get_param l_hard mpj))
+
+    if [ -n "$mps" -a -n "$mpj" ]; then
+        jsv_reject "Specifying mps and mpj does not make sense."
+        return
+    fi
+
+    if [ -z "$mps" -a -z "$mpj" ]; then
+        h_vmem=1G
+        vf=1G
+        do_correct="true"
+        jsv_sub_add_param l_hard h_vmem $h_vmem
+        jsv_sub_add_param l_hard h_stack INFINITY
+        jsv_sub_add_param l_hard virtual_free $vf
+    fi
+
+    if [ -n "$mps" ]; then
+        h_vmem=$mps
+        vf=$mps
+        do_correct="true"
+        jsv_sub_del_param l_hard mps
+        jsv_sub_add_param l_hard h_vmem $h_vmem
+        jsv_sub_add_param l_hard h_stack INFINITY
+        jsv_sub_add_param l_hard virtual_free $vf
+
+
+    fi
+    if [ -n "$mpj" ]; then
+        slots=$(jsv_get_param pe_max)
+        [ -z "$slots" ] && slots=1
+        h_vmem=$((mpj/slots))
+        vf=$((mpj/slots))
+        do_correct="true"
+        jsv_sub_del_param l_hard mpj
+        jsv_sub_add_param l_hard h_vmem $h_vmem
+        jsv_sub_add_param l_hard h_stack INFINITY
+        jsv_sub_add_param l_hard virtual_free $vf
+    fi
+
+    if [ "$do_correct" = "true" ]; then
+        jsv_correct "Job was modified before it was accepted"
+    else
+        jsv_accept "Job is accepted"
+    fi
+    return
+}
+
+. /usr/share/gridengine/util/resources/jsv/jsv_include.sh
+
+jsv_main

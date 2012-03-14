@@ -1,0 +1,9 @@
+/var/spool/gridengine/*/messages {
+	daily
+	missingok
+	notifempty	
+	rotate 5	
+	create
+	compress
+	create 0644 root root
+}
