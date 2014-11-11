@@ -4,8 +4,8 @@ set ARCH = `$SGE_ROOT/util/arch`
 set DEFAULTMANPATH = `$SGE_ROOT/util/arch -m`
 set MANTYPE = `$SGE_ROOT/util/arch -mt`
 
-setenv SGE_CELL <%= ge_cell %>
-setenv SGE_CLUSTER_NAME <%= ge_cluster %>
+setenv SGE_CELL <%= sgecell %>
+setenv SGE_CLUSTER_NAME <%= sgecluster %>
 unsetenv SGE_QMASTER_PORT
 unsetenv SGE_EXECD_PORT
 

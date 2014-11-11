@@ -4,7 +4,7 @@ ARCH=`$SGE_ROOT/util/arch`
 DEFAULTMANPATH=`$SGE_ROOT/util/arch -m`
 MANTYPE=`$SGE_ROOT/util/arch -mt`
 
-SGE_CLUSTER_NAME=<%= ge_cluster %>; export SGE_CLUSTER_NAME
+export SGE_CLUSTER_NAME
 unset SGE_QMASTER_PORT
 unset SGE_EXECD_PORT
 
