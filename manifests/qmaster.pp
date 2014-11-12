@@ -26,16 +26,9 @@ define gridengine::qmaster (
   file {
     "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv", mode => 555;
     "/etc/init.d/sgemaster":  source  => "$mod_file_path/sgemaster", mode => 700;
-    "/etc/sgeinstall.conf":   content => template("gridengine/sgeinstall.conf.erb"), mode => 600;
-  }
-
-  exec {
-    "install_qmaster":
-      cwd     => "$sgeroot",
-      path    => ["/bin","/usr/bin","$sgeroot"],
-      command => "inst_sge -m -auto /etc/sgeinstall.conf",
-      onlyif  => "test ! -d /var/spool/sge",
-      require => File["/etc/sgeinstall.conf"];
+    "/var/spool/sge":         ensure => "directory", mode => 755;
+    "/var/spool/sge/qmaster":         ensure => "directory", mode => 755;
+    "/var/spool/sge/db":         ensure => "directory", mode => 755;
   }
 
   service { 
@@ -48,8 +41,7 @@ define gridengine::qmaster (
         Class['gridengine'], 
         File["$sgecommon/system.jsv"], 
         File["/etc/init.d/sgemaster"],
-        File["/etc/sgeinstall.conf"],
-        Exec["install_qmaster"]
+        File["/etc/sgeinstall.conf"]
       ],
       subscribe => Class['gridengine'];
   }
