@@ -7,8 +7,8 @@ class gridengine::qmaster inherits gridengine (
   $sgecluster => "bigcluster"
 ){
   file {
-    "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv"), mode => 555;
-    "/etc/init.d/sgemaster":  source  => "$mod_file_path/sgemaster"), mode => 700;
+    "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv", mode => 555;
+    "/etc/init.d/sgemaster":  source  => "$mod_file_path/sgemaster", mode => 700;
   }
 
   service { 
