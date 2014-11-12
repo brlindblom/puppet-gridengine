@@ -2,7 +2,7 @@
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
 define gridengine::execd (
-  $sgemaster  = $title
+  $sgemaster  = $title,
   $sgeroot    = "/usr/share/gridengine",
   $sgecell    = "default",
   $sgecluster = "bigcluster",
