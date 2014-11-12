@@ -1,11 +1,13 @@
 # /etc/puppet/modules/gridengine/manifests/init.pp
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
-class gridengine::qmaster inherits gridengine (
+class gridengine::qmaster (
   sgeroot    = "/usr/share/gridengine",
   sgecell    = "default",
   sgecluster = "bigcluster"
 ){
+  include gridengine
+
   file {
     "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv", mode => 555;
     "/etc/init.d/sgemaster":  source  => "$mod_file_path/sgemaster", mode => 700;
