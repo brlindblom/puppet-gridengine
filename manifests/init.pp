@@ -14,11 +14,16 @@ class gridengine ($sgeroot, $sgecell, $sgemaster, $sgecluster) {
       enabled => true
   }
 
+  Package {
+    install_options => "--nogpgcheck",
+    require => Yumrepo["loveshack-SGE"],
+  }
+
   package {
-    "gridengine":         ensure => present, require => Yumrepo["loveshack-SGE"];
-    "gridengine-execd":   ensure => present, require => Yumrepo["loveshack-SGE"];
-    "gridengine-qmaster": ensure => present, require => Yumrepo["loveshack-SGE"];
-    "gridengine-qmon":    ensure => present, require => Yumrepo["loveshack-SGE"];
+    "gridengine":         ensure => present;
+    "gridengine-execd":   ensure => present;
+    "gridengine-qmaster": ensure => present;
+    "gridengine-qmon":    ensure => present;
   }
 
   File {
