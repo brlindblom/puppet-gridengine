@@ -11,13 +11,7 @@ define gridengine::qmaster (
   $sgecfgdir      = "$sgeroot/$sgecell"
   $sgecommon      = "$sgecfgdir/common"
 
-  class { 
-    'gridengine':
-      sgemaster   => $sgemaster,
-      sgeroot     => $sgeroot,
-      sgecell     => $sgecell,
-      sgecluster  => $sgecluster;
-  }
+  include gridengine
 
   file {
     "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv", mode => 555;

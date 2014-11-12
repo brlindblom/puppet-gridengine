@@ -11,13 +11,8 @@ define gridengine::execd (
   $sgecfgdir      = "$sgeroot/$sgecell"
   $sgecommon      = "$sgecfgdir/common"
 
-  class { 
-    'gridengine':
-      sgemaster   => $sgemaster,
-      sgeroot     => $sgeroot,
-      sgecell     => $sgecell,
-      sgecluster  => $sgecluster;
-  }
+  include gridengine
+
 	cron {
     orphanprocs:
 	    command => "/usr/sbin/cleanorphans",
