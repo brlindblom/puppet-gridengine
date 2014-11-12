@@ -2,11 +2,19 @@
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
 class gridengine {
+  yumrepo {
+    "loveshack-SGE":
+      baseurl => "http://copr-be.cloud.fedoraproject.org/results/loveshack/SGE/epel-6-\$basearch/",
+      skip_if_unavailable => true,
+      gpgcheck => false,
+      enabled => true
+  }
+
   package { 
-    "gridengine":         ensure => present; 
-    "gridengine-execd":   ensure => present; 
-    "gridengine-qmaster": ensure => present; 
-    "gridengine-qmon":    ensure => present;
+    "gridengine":         ensure => present, require => Yumrepo["loveshack-SGE"]; 
+    "gridengine-execd":   ensure => present, require => Yumrepo["loveshack-SGE"]; 
+    "gridengine-qmaster": ensure => present, require => Yumrepo["loveshack-SGE"]; 
+    "gridengine-qmon":    ensure => present, require => Yumrepo["loveshack-SGE"];
   }
 
   $mod_file_path  = "puppet:///modules/gridengine"
