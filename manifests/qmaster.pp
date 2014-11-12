@@ -50,7 +50,6 @@ define gridengine::qmaster (
         Class['gridengine'], 
         File["$sgecommon/system.jsv"], 
         File["/etc/init.d/sgemaster"],
-        File["/etc/sgeinstall.conf"],
         File["/var/spool/sge/qmaster"],
         Exec["berkeley_db_init"]
       ],
