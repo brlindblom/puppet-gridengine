@@ -42,5 +42,7 @@ class gridengine ($sgeroot, $sgecell, $sgemaster, $sgecluster) {
     "$sgecommon/settings.sh":     source  => "$mod_file_path/settings.sh";
     "$sgecommon/settings.csh":    content => template("gridengine/settings.csh.erb");
     "/etc/sysconfig/gridengine":  content => template("gridengine/gridengine.erb");
+    "/etc/profile.d/sge.sh":      ensure => link, target => "$sgecommon/settings.sh";
+    "/etc/profile.d/sge.csh":     ensure => link, target => "$sgecommon/settings.csh";
   }
 }
