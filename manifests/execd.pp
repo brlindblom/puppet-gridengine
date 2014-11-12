@@ -1,12 +1,12 @@
 # /etc/puppet/modules/gridengine/manifests/init.pp
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
-class gridengine::execd (
-  sgeroot    = "/usr/share/gridengine",
-  sgecell    = "default",
-  sgecluster = "bigcluster",
+define gridengine::execd (
+  $sgeroot    => "/usr/share/gridengine",
+  $sgecell    => "default",
+  $sgecluster => "bigcluster",
 ){
-  include gridengine
+  require gridengine
   $sgemaster = $name
 	cron {
     orphanprocs:

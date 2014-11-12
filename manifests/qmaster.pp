@@ -1,12 +1,12 @@
 # /etc/puppet/modules/gridengine/manifests/init.pp
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
-class gridengine::qmaster (
-  sgeroot    = "/usr/share/gridengine",
-  sgecell    = "default",
-  sgecluster = "bigcluster"
+define gridengine::qmaster (
+  $sgeroot    => "/usr/share/gridengine",
+  $sgecell    => "default",
+  $sgecluster => "bigcluster"
 ){
-  include gridengine
+  require gridengine
 
   file {
     "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv", mode => 555;
