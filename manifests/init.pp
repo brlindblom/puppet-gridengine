@@ -26,7 +26,7 @@ class gridengine {
     "$sgecommon/bootstrap":       content => template("gridengine/bootstrap.erb");
     "$sgecommon/act_qmaster":     content => template("gridengine/act_qmaster.erb");
     "$sgecommon/sge_request":     source  => "$mod_file_path/sge_request";
-    "$sgecommon/settings.sh":     source  => "$mod_file_path/settings.sh");
+    "$sgecommon/settings.sh":     source  => "$mod_file_path/settings.sh";
     "$sgecommon/settings.csh":    content => template("gridengine/settings.csh.erb");
     "/etc/sysconfig/gridengine":  content => template("gridengine/gridengine.erb");
   }
