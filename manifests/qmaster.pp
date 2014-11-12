@@ -37,12 +37,12 @@ define gridengine::qmaster (
       path        => ["/bin","/usr/bin","$sgeroot/utilbin/lx-amd64"],
       environment => ["SGE_ROOT=$sgeroot", "SGE_CELL=$sgecell"],
       cwd         => "$sgeroot/utilbin/lx-amd64",
-      command     => [
+      command     => join([
         "spoolinit berkeleydb $sgeroot/lib/lx-amd64/libspoolb /var/spool/sge/db init",
         "spooldefaults configuration /var/spool/sge/qmaster/defaultcfg",
         "spooldefaults complexes $sgeroot/util/resources/centry",
         "spooldefaults pes $sgeroot/util/resources/pes"
-        ],
+        ], ";"),
       onlyif      => "test ! -f /var/spool/sge/db/sge",
       require     => [ File["/var/spool/sge/db"], File["/var/spool/sge/qmaster/defaultcfg"] ];
   }
