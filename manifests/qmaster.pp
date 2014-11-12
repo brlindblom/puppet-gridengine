@@ -4,8 +4,7 @@
 class gridengine::qmaster inherits gridengine (
   $sgeroot    => "/usr/share/gridengine",
   $sgecell    => "default",
-  $sgecluster => "bigcluster",
-  $sgeqmaster => "qmaster"
+  $sgecluster => "bigcluster"
 ){
   file {
     "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv"), mode => 555;

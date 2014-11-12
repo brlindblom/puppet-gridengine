@@ -5,9 +5,9 @@ class gridengine::execd inherits gridengine (
   $sgeroot    => "/usr/share/gridengine",
   $sgecell    => "default",
   $sgecluster => "bigcluster",
-  $sgeqmaster => "qmaster"
 ){
 
+  $sgemaster = $name
 	cron {
     orphanprocs:
 	    command => "/usr/sbin/cleanorphans",
