@@ -7,6 +7,10 @@ define gridengine::execd (
   $sgecell    = "default",
   $sgecluster = "bigcluster",
 ){
+  $mod_file_path  = "puppet:///modules/gridengine"
+  $sgecfgdir      = "$sgeroot/$sgecell"
+  $sgecommon      = "$sgecfgdir/common"
+
   class { 
     'gridengine':
       sgemaster   => $sgemaster,

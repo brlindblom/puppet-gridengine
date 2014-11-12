@@ -2,6 +2,10 @@
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
 class gridengine ( $sgeroot, $sgecell, $sgecluster, $sgemaster) {
+  $mod_file_path  = "puppet:///modules/gridengine"
+  $sgecfgdir      = "$sgeroot/$sgecell"
+  $sgecommon      = "$sgecfgdir/common"
+
   yumrepo {
     "loveshack-SGE":
       baseurl => "http://copr-be.cloud.fedoraproject.org/results/loveshack/SGE/epel-6-\$basearch/",
@@ -16,10 +20,6 @@ class gridengine ( $sgeroot, $sgecell, $sgecluster, $sgemaster) {
     "gridengine-qmaster": ensure => present, require => Yumrepo["loveshack-SGE"];
     "gridengine-qmon":    ensure => present, require => Yumrepo["loveshack-SGE"];
   }
-
-  $mod_file_path  = "puppet:///modules/gridengine"
-  $sgecfgdir      = "$sgeroot/$sgecell"
-  $sgecommon      = "$sgecfgdir/common"
 
   File {
     owner   => "root",
