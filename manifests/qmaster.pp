@@ -2,9 +2,9 @@
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
 define gridengine::qmaster (
-  $sgeroot    => "/usr/share/gridengine",
-  $sgecell    => "default",
-  $sgecluster => "bigcluster"
+  $sgeroot    = "/usr/share/gridengine",
+  $sgecell    = "default",
+  $sgecluster = "bigcluster"
 ){
   require gridengine
 
