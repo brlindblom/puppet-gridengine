@@ -2,12 +2,12 @@
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
 define gridengine::execd (
+  $sgemaster  = $title
   $sgeroot    = "/usr/share/gridengine",
   $sgecell    = "default",
   $sgecluster = "bigcluster",
 ){
   require gridengine
-  $sgemaster = $name
 	cron {
     orphanprocs:
 	    command => "/usr/sbin/cleanorphans",
