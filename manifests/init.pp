@@ -1,7 +1,7 @@
 # /etc/puppet/modules/gridengine/manifests/init.pp
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
-class gridengine {
+class gridengine ($sgeroot, $sgecell, $sgemaster) {
   $mod_file_path  = "puppet:///modules/gridengine"
   $sgecfgdir      = "$sgeroot/$sgecell"
   $sgecommon      = "$sgecfgdir/common"

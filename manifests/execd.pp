@@ -11,7 +11,17 @@ define gridengine::execd (
   $sgecfgdir      = "$sgeroot/$sgecell"
   $sgecommon      = "$sgecfgdir/common"
 
-  include gridengine
+  class { 
+    'gridengine': 
+      sgemaster =>  $sgemaster, 
+      sgeroot =>    $sgeroot, 
+      sgecell =>    $sgecell,
+      sgecluster => $sgecluster;
+  }
+
+  File {
+    require => Class['gridengine'],
+  }
 
 	cron {
     orphanprocs:
@@ -36,6 +46,7 @@ define gridengine::execd (
 		  ensure => running,
 		  hasstatus => true,
 		  hasrestart => true,
+      require => Class['gridengine'],
 		  subscribe => [ 
         Package["gridengine-execd"], 
         File["$sgecfgdir/bootstrap"], 

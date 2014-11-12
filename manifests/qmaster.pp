@@ -11,7 +11,17 @@ define gridengine::qmaster (
   $sgecfgdir      = "$sgeroot/$sgecell"
   $sgecommon      = "$sgecfgdir/common"
 
-  include gridengine
+  class { 
+    'gridengine': 
+      sgemaster =>  $sgemaster, 
+      sgeroot =>    $sgeroot, 
+      sgecell =>    $sgecell,
+      sgecluster => $sgecluster;
+  }
+
+  File {
+    require => Class['gridengine'],
+  }
 
   file {
     "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv", mode => 555;
@@ -24,6 +34,7 @@ define gridengine::qmaster (
       ensure => running,
       hasstatus => true,
       hasrestart => true,
+      require => Class['gridengine'],
       subscribe => [ 
         Package["gridengine-qmaster"], 
         File["$sgecfgdir/bootstrap"], 
