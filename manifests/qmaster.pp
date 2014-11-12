@@ -34,13 +34,7 @@ define gridengine::qmaster (
       ensure => running,
       hasstatus => true,
       hasrestart => true,
-      require => Class['gridengine'],
-      subscribe => [ 
-        Package["gridengine-qmaster"], 
-        File["$sgecfgdir/bootstrap"], 
-        File["$sgecfgdir/act_qmaster"], 
-        File["/etc/sysconfig/gridengine"],
-        File["/etc/init.d/sgemaster"],
-      ];
+      require => [ Class['gridengine'], File["$sgecommon/system.jsv"], File["/etc/init.d/sgemaster"] ],
+      subscribe => Class['gridengine'];
   }
 }

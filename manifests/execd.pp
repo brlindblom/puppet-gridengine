@@ -46,13 +46,7 @@ define gridengine::execd (
 		  ensure => running,
 		  hasstatus => true,
 		  hasrestart => true,
-      require => Class['gridengine'],
-		  subscribe => [ 
-        Package["gridengine-execd"], 
-        File["$sgecfgdir/bootstrap"], 
-        File["$sgecfgdir/act_qmaster"], 
-        File["/etc/sysconfig/gridengine"],
-        File["/etc/init.d/sgeexecd"],
-      ];
+      require => [ Class['gridengine'], File['/etc/init.d/sgexecd'] ],
+		  subscribe => Class['gridengine'];
 	}
 }
