@@ -14,7 +14,6 @@ else
 fi
 
 . /usr/share/gridengine/default/common/settings.sh
-# . /opt/ge6.2u4/itrc/common/settings.sh
 
 function debug(){
 	[ -n "$DEBUG" ] && echo $@

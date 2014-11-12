@@ -3,33 +3,31 @@
 
 class gridengine {
   package { 
-    "gridengine-execd":   ensure => present; 
     "gridengine":         ensure => present; 
+    "gridengine-execd":   ensure => present; 
     "gridengine-qmaster": ensure => present; 
     "gridengine-qmon":    ensure => present;
   }
 
-  $ge_root  = "/usr/share/gridengine"
-  $ge_cell  = "default"
-  $ge_cluster = "circe"
-  $ge_common  = "$ge_root/$ge_cell/common"
-  $ge_qmaster = "sge.rc.usf.edu"
+  $mod_file_path  = "puppet:///modules/gridengine"
+  $sgecfgdir      = "$sgeroot/$sgecell"
+  $sgecommon      = "$sgecfgdir/common"
 
   File {
-    owner => "root",
-    group => "root",
-    mode  => "444",
+    owner   => "root",
+    group   => "root",
+    mode    => "444",
     require => Package["gridengine", "gridengine-execd"],
   }
 
   file {
-    "$ge_root/$ge_cell":          ensure => directory, mode => 755;
-    "$ge_common":                 ensure => directory, mode => 755;
-    "$ge_common/bootstrap":       content => template("gridengine/bootstrap.erb");
-    "$ge_common/act_qmaster":     content => template("gridengine/act_qmaster.erb");
-    "$ge_common/sge_request":     content => template("gridengine/sge_request.erb");
-    "$ge_common/settings.sh":     content => template("gridengine/settings.sh.erb");
-    "$ge_common/settings.csh":    content => template("gridengine/settings.csh.erb");
+    "$sgecfgdir":                 ensure  => directory, mode => 755;
+    "$sgecommon":                 ensure  => directory, mode => 755;
+    "$sgecommon/bootstrap":       content => template("gridengine/bootstrap.erb");
+    "$sgecommon/act_qmaster":     content => template("gridengine/act_qmaster.erb");
+    "$sgecommon/sge_request":     source  => "$mod_file_path/sge_request";
+    "$sgecommon/settings.sh":     source  => "$mod_file_path/settings.sh");
+    "$sgecommon/settings.csh":    content => template("gridengine/settings.csh.erb");
     "/etc/sysconfig/gridengine":  content => template("gridengine/gridengine.erb");
   }
 }

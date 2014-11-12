@@ -50,8 +50,5 @@
 #
 # -j y
 #
--p -100
--l p_low=false,t_devel=false,cuda=false,class=false
--v SGE_ITRVAL=1,OMP_NUM_THREADS=1
 -l h_rt=00:10:00
 #-w e

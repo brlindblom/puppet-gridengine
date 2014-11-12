@@ -2,14 +2,14 @@
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
 class gridengine::qmaster inherits gridengine (
-  $sgeqmaster = "sge.master",
-  $sgeroot    = "/usr/lib/gridengine",
-  $sgecell    = "default",
-  $sgecluster = "default"
+  $sgeroot    => "/usr/share/gridengine",
+  $sgecell    => "default",
+  $sgecluster => "bigcluster",
+  $sgeqmaster => "qmaster"
 ){
   file {
-    "$ge_common/system.jsv":  source  => "puppet:///modules/gridengine/system.jsv"), mode => 555;
-    "/etc/init.d/sgemaster":  source  => "puppet:///modules/gridengine/sgemaster"), mode => 700;
+    "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv"), mode => 555;
+    "/etc/init.d/sgemaster":  source  => "$mod_file_path/sgemaster"), mode => 700;
   }
 
   service { 
@@ -20,8 +20,8 @@ class gridengine::qmaster inherits gridengine (
       hasrestart => true,
       subscribe => [ 
         Package["gridengine-qmaster"], 
-        File["$ge_path/bootstrap"], 
-        File["$ge_path/act_qmaster"], 
+        File["$sgecfgdir/bootstrap"], 
+        File["$sgecfgdir/act_qmaster"], 
         File["/etc/sysconfig/gridengine"],
         File["/etc/init.d/sgemaster"],
       ];
