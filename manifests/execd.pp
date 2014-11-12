@@ -7,7 +7,7 @@ define gridengine::execd (
   $sgecell    = "default",
   $sgecluster = "bigcluster",
 ){
-  require gridengine
+  include gridengine
 	cron {
     orphanprocs:
 	    command => "/usr/sbin/cleanorphans",
