@@ -7,7 +7,13 @@ define gridengine::qmaster (
   $sgecell    = "default",
   $sgecluster = "bigcluster"
 ){
-  include gridengine
+  class { 
+    'gridengine':
+      sgemaster   => $sgemaster,
+      sgeroot     => $sgeroot,
+      sgecell     => $sgecell,
+      sgecluster  => $sgecluster;
+  }
 
   file {
     "$sgecommon/system.jsv":  source  => "$mod_file_path/system.jsv", mode => 555;

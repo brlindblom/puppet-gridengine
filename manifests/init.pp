@@ -1,7 +1,7 @@
 # /etc/puppet/modules/gridengine/manifests/init.pp
 # Created by root on Thu Dec  3 16:40:42 EST 2009
 
-class gridengine {
+class gridengine ( $sgeroot, $sgecell, $sgecluster, $sgemaster) {
   yumrepo {
     "loveshack-SGE":
       baseurl => "http://copr-be.cloud.fedoraproject.org/results/loveshack/SGE/epel-6-\$basearch/",
@@ -10,10 +10,10 @@ class gridengine {
       enabled => true
   }
 
-  package { 
-    "gridengine":         ensure => present, require => Yumrepo["loveshack-SGE"]; 
-    "gridengine-execd":   ensure => present, require => Yumrepo["loveshack-SGE"]; 
-    "gridengine-qmaster": ensure => present, require => Yumrepo["loveshack-SGE"]; 
+  package {
+    "gridengine":         ensure => present, require => Yumrepo["loveshack-SGE"];
+    "gridengine-execd":   ensure => present, require => Yumrepo["loveshack-SGE"];
+    "gridengine-qmaster": ensure => present, require => Yumrepo["loveshack-SGE"];
     "gridengine-qmon":    ensure => present, require => Yumrepo["loveshack-SGE"];
   }
 
