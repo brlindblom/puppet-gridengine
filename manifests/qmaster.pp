@@ -31,6 +31,7 @@ define gridengine::qmaster (
 
   exec {
     "install_qmaster":
+      cwd     => "$sgeroot",
       path    => ["/bin","/usr/bin","$sgeroot"],
       command => "inst_sge -m -auto /etc/sgeinstall.conf",
       onlyif  => "test ! -d /var/spool/sge",
